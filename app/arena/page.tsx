@@ -44,37 +44,6 @@ export default function ArenaPage() {
   const [isReady, setIsReady] = useState(false);
   const [selectedLang, setSelectedLang] = useState(LANGUAGES[0]);
   const [timeElapsed, setTimeElapsed] = useState(0);
-  const [teammates, setTeammates] = useState<any[]>([]);
-
-  // Fetch Squad Members
-  useEffect(() => {
-    if (!teamName) return;
-    
-    const fetchTeammates = async () => {
-      const { data, error } = await supabase
-        .from('combatants')
-        .select('email, joined_at')
-        .eq('team_name', teamName);
-        
-      if (!error && data) {
-        setTeammates(data);
-      }
-    };
-    
-    fetchTeammates();
-    
-    // Set up realtime subscription so when friends join, it updates instantly
-    const channel = supabase
-      .channel('combatants_changes')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'combatants', filter: `team_name=eq.${teamName}` }, (payload) => {
-        setTeammates(prev => [...prev, payload.new]);
-      })
-      .subscribe();
-      
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [teamName]);
 
   // Timer Effect
   useEffect(() => {
@@ -120,7 +89,7 @@ export default function ArenaPage() {
       const { error } = await supabase
         .from('teams')
         .upsert([{ name: trimmedName }], { onConflict: 'name' });
-        
+
       if (error) {
         console.error("Error saving team to Supabase:", error);
         alert(`Failed to save team: ${error.message || JSON.stringify(error)}`);
@@ -290,8 +259,8 @@ export default function ArenaPage() {
               </div>
               <Users className="h-5 w-5 text-brand-primary" />
             </div>
-            
-            <button 
+
+            <button
               onClick={handleLogout}
               title="Logout / Change Team"
               className="ml-2 rounded-full p-1.5 text-brand-text/40 hover:bg-brand-danger/10 hover:text-brand-danger transition-colors"
@@ -409,7 +378,7 @@ export default function ArenaPage() {
                 minimap: { enabled: false },
                 fontSize: 14,
                 fontFamily: "var(--font-mono)",
-                backgroundColor: "#0D0D0D",
+                // backgroundColor: "#0D0D0D",
                 scrollBeyondLastLine: false,
                 padding: { top: 20 },
                 lineNumbersMinChars: 3,
@@ -450,40 +419,8 @@ export default function ArenaPage() {
           </div>
         </div>
 
-        {/* Right Panel: Squad & Opponent */}
-        <div className="w-[300px] border-l border-brand-text/5 bg-brand-bg/30 p-6 flex flex-col overflow-hidden">
-          {/* Squad Info */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xs font-mono font-bold uppercase tracking-widest text-brand-primary flex items-center gap-2">
-                <Users className="h-3 w-3" />
-                Squad Network
-              </h3>
-              <span className="text-[10px] font-mono text-brand-text/40 bg-brand-text/5 px-2 py-0.5 rounded-full border border-brand-text/10">{teammates.length} Active</span>
-            </div>
-            
-            <div className="space-y-2 max-h-[150px] overflow-y-auto pr-2 custom-scrollbar">
-              {teammates.length === 0 ? (
-                <div className="text-[10px] font-mono text-brand-text/30 italic px-2">Awaiting squad members...</div>
-              ) : (
-                teammates.map((member, i) => (
-                  <div key={i} className="flex items-center justify-between rounded bg-brand-text/[0.02] p-2.5 border border-brand-text/5 group hover:border-brand-primary/20 transition-colors">
-                    <div className="flex items-center gap-2">
-                      <div className="h-1.5 w-1.5 rounded-full bg-brand-success animate-pulse shadow-[0_0_5px_rgba(74,222,128,0.5)]" />
-                      <span className="text-xs font-mono text-brand-text/80 truncate max-w-[120px]">
-                        {member.email.split('@')[0]}
-                      </span>
-                    </div>
-                    <span className="text-[8px] font-mono text-brand-text/30 uppercase group-hover:text-brand-primary/50 transition-colors">Online</span>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-brand-text/10 to-transparent mb-8" />
-
-          {/* Opponent Progress */}
+        {/* Right Panel: Opponent Progress */}
+        <div className="w-[300px] border-l border-brand-text/5 bg-brand-bg/30 p-6 overflow-hidden">
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-xs font-mono font-bold uppercase tracking-widest text-brand-text/40">Opponent: KernelPanic</h3>
