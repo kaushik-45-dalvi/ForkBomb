@@ -48,6 +48,7 @@ export default function ArenaPage() {
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [spectators, setSpectators] = useState(47);
   const [userElo, setUserElo] = useState(1420);
+  const [warnings, setWarnings] = useState(0);
 
   // Timer & Spectators Effect
   useEffect(() => {
@@ -157,7 +158,36 @@ export default function ArenaPage() {
     setTimeElapsed(0);
   };
 
+  const validateCode = () => {
+    const strippedCode = code.trim();
+    const isUnchanged = strippedCode === currentChallenge.initialCode.trim() || strippedCode === selectedLang.defaultCode.trim();
+    const isTooShort = strippedCode.length < 15;
+    const isNonsense = strippedCode.toLowerCase().includes("naaz pathan") || strippedCode.toLowerCase().includes("op bolte");
+    
+    if (isUnchanged || isTooShort || isNonsense) {
+       setWarnings(prev => {
+         const newWarnings = prev + 1;
+         if (newWarnings >= 3) {
+            alert("CRITICAL WARNING: 3 strikes. You have been removed from the Arena for writing nonsense.");
+            handleLogout();
+         } else {
+            alert(`WARNING ${newWarnings}/3: Invalid, unchanged, or garbage code detected. The AI Judge is losing patience.`);
+         }
+         return newWarnings;
+       });
+       
+       setStatus("idle");
+       setRunLogs([
+         { text: "SyntaxError: Code execution failed. Stop writing garbage.", type: "danger" }
+       ]);
+       return false;
+    }
+    return true;
+  };
+
   const handleRun = () => {
+    if (!validateCode()) return;
+
     setStatus("running");
     setRunLogs([]);
     
@@ -184,6 +214,8 @@ export default function ArenaPage() {
   };
 
   const handleSubmit = async () => {
+    if (!validateCode()) return;
+
     setStatus("finishing");
     setIsBlasting(true);
 
