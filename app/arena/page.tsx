@@ -43,6 +43,7 @@ export default function ArenaPage() {
   const [isBlasting, setIsBlasting] = useState(false);
   const [teamName, setTeamName] = useState("");
   const [isReady, setIsReady] = useState(false);
+  const [opponent, setOpponent] = useState<{name: string, elo: number} | null>(null);
   const [selectedLang, setSelectedLang] = useState(LANGUAGES[0]);
   const [timeElapsed, setTimeElapsed] = useState(0);
 
@@ -78,6 +79,39 @@ export default function ArenaPage() {
 
     setCode(currentChallenge.initialCode);
   }, [currentChallenge]);
+
+  useEffect(() => {
+    async function fetchOpponent() {
+      if (!teamName) return;
+      const { data, error } = await supabase
+        .from('teams')
+        .select('*')
+        .neq('name', teamName)
+        .order('created_at', { ascending: false })
+        .limit(1);
+        
+      if (!error && data && data.length > 0) {
+        setOpponent({ name: data[0].name, elo: data[0].elo || 1850 });
+      }
+    }
+    
+    if (isReady && teamName) {
+      fetchOpponent();
+      
+      const channel = supabase
+        .channel('teams-channel')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'teams' }, payload => {
+          if (payload.new.name !== teamName) {
+            setOpponent({ name: payload.new.name, elo: payload.new.elo || 1850 });
+          }
+        })
+        .subscribe();
+        
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+  }, [isReady, teamName]);
 
   const handleStartDuel = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -448,8 +482,8 @@ export default function ArenaPage() {
         <div className="w-[300px] border-l border-brand-text/5 bg-brand-bg/30 p-6 overflow-hidden">
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xs font-mono font-bold uppercase tracking-widest text-brand-text/40">Opponent: KernelPanic</h3>
-              <span className="text-[10px] font-mono text-brand-danger">ELO: 1,850</span>
+              <h3 className="text-xs font-mono font-bold uppercase tracking-widest text-brand-text/40">Opponent: {opponent ? opponent.name : "KernelPanic"}</h3>
+              <span className="text-[10px] font-mono text-brand-danger">ELO: {opponent?.elo || "1,850"}</span>
             </div>
             <div className="space-y-4">
               <div>
