@@ -52,3 +52,8 @@
 .text-glow {
   text-shadow: 0 0 10px color-mix(in srgb, var(--color-brand-primary), transparent 50%);
 }
+
+/* Nuke Next.js Dev Indicator */
+nextjs-portal {
+  display: none !important;
+}

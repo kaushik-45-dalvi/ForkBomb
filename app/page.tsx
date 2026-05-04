@@ -26,7 +26,7 @@ export default function LandingPage() {
           <Logo className="h-10 w-10 transition-transform group-hover:scale-110" />
           <span className="text-xl font-bold tracking-tighter text-brand-text">FORKBOMB</span>
         </Link>
-        
+
         <div className="hidden items-center gap-8 md:flex">
           <Link href="#features" className="text-sm font-medium transition-colors hover:text-brand-primary">Features</Link>
           <Link href="/arena" className="text-sm font-medium transition-colors hover:text-brand-primary">Arena</Link>
@@ -36,8 +36,8 @@ export default function LandingPage() {
 
         <div className="flex items-center gap-4">
           <Link href="/login" className="text-sm font-medium transition-colors hover:text-brand-primary">Sign In</Link>
-          <Link 
-            href="/signup" 
+          <Link
+            href="/signup"
             className="rounded-full bg-brand-primary px-6 py-2 text-sm font-bold text-brand-bg transition-transform hover:scale-105 active:scale-95"
           >
             Get Started
@@ -47,7 +47,7 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative z-10 flex flex-col items-center justify-center px-6 pt-20 pb-32 text-center md:px-12 md:pt-32">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-6 flex items-center gap-2 rounded-full border border-brand-primary/20 bg-brand-primary/5 px-4 py-1.5 backdrop-blur-md"
@@ -56,7 +56,7 @@ export default function LandingPage() {
           <span className="text-xs font-semibold tracking-widest text-brand-primary uppercase">v1.0 Ready for Deployment</span>
         </motion.div>
 
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
@@ -66,30 +66,30 @@ export default function LandingPage() {
           <span className="italic text-brand-primary">code faster</span> today
         </motion.h1>
 
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="mt-8 max-w-2xl text-lg text-brand-text/60 md:text-xl"
         >
-          The digital colosseum where developers face off in real-time. 
+          The digital colosseum where developers face off in real-time.
           No more boring whiteboards. It's time to turn your code into a combat sport.
         </motion.p>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           className="mt-12 flex flex-col gap-4 sm:flex-row"
         >
-          <Link 
-            href="/arena" 
+          <Link
+            href="/arena"
             className="group flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-brand-bg transition-all hover:pr-10"
           >
             Enter The Arena
             <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
           </Link>
-          <Link 
+          <Link
             href="#how-it-works"
             className="flex items-center justify-center gap-2 rounded-full border border-brand-text/20 bg-transparent px-8 py-4 text-lg font-medium transition-colors hover:bg-brand-text/5"
           >
@@ -108,20 +108,20 @@ export default function LandingPage() {
 
           <div className="grid gap-12 md:grid-cols-3">
             {[
-              { 
-                step: "01", 
-                title: "Initialize Duel", 
-                desc: "Choose your language and enter the 1v1 Arena or an 8-player Battle Royale. You'll be matched with an opponent of similar ELO in seconds." 
+              {
+                step: "01",
+                title: "Initialize Duel",
+                desc: "Choose your language and enter the 1v1 Arena or an 8-player Battle Royale. You'll be matched with an opponent of similar ELO in seconds."
               },
-              { 
-                step: "02", 
-                title: "Execute Logic", 
-                desc: "Solve the algorithmic challenge in our high-performance editor. Every keystroke counts. Watch your opponent's progress in real-time." 
+              {
+                step: "02",
+                title: "Execute Logic",
+                desc: "Solve the algorithmic challenge in our high-performance editor. Every keystroke counts. Watch your opponent's progress in real-time."
               },
-              { 
-                step: "03", 
-                title: "Savage Verdict", 
-                desc: "Submit to trigger 'The Blast'. Our AI Judge roasts your solution for performance, elegance, and creativity. Win to climb the Root Table." 
+              {
+                step: "03",
+                title: "Savage Verdict",
+                desc: "Submit to trigger 'The Blast'. Our AI Judge roasts your solution for performance, elegance, and creativity. Win to climb the Root Table."
               }
             ].map((item, i) => (
               <div key={i} className="group relative rounded-3xl border border-brand-text/5 bg-brand-text/[0.02] p-10 transition-colors hover:border-brand-primary/20">
@@ -146,10 +146,10 @@ export default function LandingPage() {
                 <span className="italic text-brand-primary">AI Evaluation</span>
               </h2>
               <p className="mt-8 text-xl text-brand-text/60 leading-relaxed">
-                Beyond mere test cases. ForkBomb's AI Judge analyzes your code for "Rustacean" patterns, 
+                Beyond mere test cases. ForkBomb's AI Judge analyzes your code for "Rustacean" patterns,
                 "Pythonic" idioms, and sheer elegance. We don't just care if it works; we care if it's art.
               </p>
-              
+
               <div className="mt-12 space-y-6">
                 {[
                   "Isolated Firecracker MicroVMs for 500ms execution",
@@ -165,7 +165,7 @@ export default function LandingPage() {
                 ))}
               </div>
             </div>
-            
+
             <div className="flex-1">
               {/* Arena Preview (Saspo-style Dashboard) */}
               <div className="overflow-hidden rounded-3xl border border-brand-text/10 bg-[#161412] shadow-2xl transition-transform hover:scale-[1.02]">
@@ -179,7 +179,7 @@ export default function LandingPage() {
                   <div className="text-xs font-mono text-brand-text/40 tracking-widest uppercase">arena.forkbomb.gg — session_042</div>
                   <div className="w-12" />
                 </div>
-                
+
                 {/* Terminal Mockup */}
                 <div className="grid grid-cols-1 md:grid-cols-2">
                   <div className="border-r border-brand-text/5 p-8">
@@ -221,10 +221,10 @@ export default function LandingPage() {
             <div className="max-w-xl">
               <h2 className="font-serif text-5xl md:text-6xl">Private War Rooms</h2>
               <p className="mt-6 text-xl text-brand-text/60 leading-relaxed">
-                Companies like Google and Vercel use ForkBomb for "Live Fire" recruitment. 
+                Companies like Google and Vercel use ForkBomb for "Live Fire" recruitment.
                 Host custom tournaments, upload your own problem sets, and see candidates' logic under pressure.
               </p>
-              <button 
+              <button
                 onClick={() => setIsDemoOpen(true)}
                 className="mt-10 rounded-full bg-brand-primary px-8 py-4 font-bold text-brand-bg transition-all hover:shadow-[0_0_20px_rgba(245,199,93,0.3)]"
               >
