@@ -38,6 +38,7 @@ export default function ArenaPage() {
 
   const [code, setCode] = useState(currentChallenge.initialCode);
   const [status, setStatus] = useState<"idle" | "running" | "submitted" | "finishing">("idle");
+  const [runLogs, setRunLogs] = useState<{text: string, type: 'success' | 'danger' | 'info'}[]>([]);
   const [showRoast, setShowRoast] = useState(false);
   const [isBlasting, setIsBlasting] = useState(false);
   const [teamName, setTeamName] = useState("");
@@ -106,7 +107,28 @@ export default function ArenaPage() {
 
   const handleRun = () => {
     setStatus("running");
-    setTimeout(() => setStatus("idle"), 2000);
+    setRunLogs([]);
+    
+    let step = 0;
+    const totalTests = 12;
+    const passedTests = 8;
+    
+    const interval = setInterval(() => {
+      step++;
+      if (step <= passedTests) {
+        setRunLogs(prev => [...prev, { text: `✓ Test Case ${step}: PASS (${Math.floor(Math.random() * 40) + 10}ms)`, type: 'success' }]);
+      } else if (step <= totalTests) {
+        setRunLogs(prev => [...prev, { text: `✗ Test Case ${step}: FAIL (Output mismatch)`, type: 'danger' }]);
+      }
+      
+      if (step === totalTests) {
+        clearInterval(interval);
+        setTimeout(() => {
+          setRunLogs(prev => [...prev, { text: `\nResult: ${passedTests}/${totalTests} Tests Passed.`, type: 'info' }]);
+          setStatus("idle");
+        }, 500);
+      }
+    }, 150);
   };
 
   const handleSubmit = async () => {
@@ -396,15 +418,18 @@ export default function ArenaPage() {
               </span>
             </div>
             <div className="space-y-1 overflow-y-auto h-[140px] text-brand-text/60">
-              {status === "running" && (
+              {(status === "running" || (status === "idle" && runLogs.length > 0)) && (
                 <>
                   <div className="text-brand-text/30">$ {selectedLang.id === "python" ? "python3" : selectedLang.id === "cpp" ? "g++" : "node"} solution --test-cases</div>
-                  <div className="text-brand-success">✓ Test Case 1: PASS (42ms)</div>
-                  <div className="text-brand-success">✓ Test Case 2: PASS (38ms)</div>
-                  <div className="animate-pulse">_</div>
+                  {runLogs.map((log, i) => (
+                    <div key={i} className={log.type === 'info' ? 'text-brand-text/80 font-bold mt-2 whitespace-pre-line' : `text-brand-${log.type}`}>
+                      {log.text}
+                    </div>
+                  ))}
+                  <div className="animate-pulse mt-1">_</div>
                 </>
               )}
-              {status === "idle" && (
+              {status === "idle" && runLogs.length === 0 && (
                 <div className="text-brand-text/30">Wait for input...</div>
               )}
               {status === "finishing" && (
