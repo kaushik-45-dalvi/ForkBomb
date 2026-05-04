@@ -249,10 +249,8 @@ export default function LandingPage() {
           <div className="text-xs font-mono text-brand-text/30 uppercase tracking-widest">
             © 2026 FORKBOMB.GG — CODE. CLONE. CONQUER.
           </div>
-          <div className="flex gap-8 text-xs font-mono text-brand-text/50 uppercase tracking-widest">
-            <Link href="#" className="hover:text-brand-primary transition-colors">Github</Link>
-            <Link href="#" className="hover:text-brand-primary transition-colors">X / Twitter</Link>
-            <Link href="#" className="hover:text-brand-primary transition-colors">Discord</Link>
+          <div className="text-xs font-mono text-brand-primary/80 uppercase tracking-widest italic">
+            The most addictive competitive coding platform on Earth.
           </div>
         </div>
       </footer>
