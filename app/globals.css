@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #F5C75D; /* Saspo Gold */
+  --color-brand-bg: #0F0D0A;      /* Saspo Dark */
+  --color-brand-danger: #FF4500;  /* Danger Orange */
+  --color-brand-success: #39FF14; /* Neon Green */
+  --color-brand-text: #F0EADA;    /* Saspo Cream */
+  
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono);
+  --font-sans: var(--font-sans);
+}
+
+:root {
+  --background: #0F0D0A;
+  --foreground: #F0EADA;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-bg text-brand-text antialiased selection:bg-brand-primary selection:text-brand-bg;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+}
+
+/* Glitch Animations */
+@keyframes glitch {
+  0% { transform: translate(0) }
+  20% { transform: translate(-2px, 2px) }
+  40% { transform: translate(-2px, -2px) }
+  60% { transform: translate(2px, 2px) }
+  80% { transform: translate(2px, -2px) }
+  100% { transform: translate(0) }
+}
+
+.animate-glitch {
+  animation: glitch 0.2s cubic-bezier(.25,.46,.45,.94) both infinite;
+}
+
+/* Custom Utilities */
+.glass {
+  background: rgba(240, 234, 218, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(240, 234, 218, 0.05);
+}
+
+.terminal-border {
+  border: 1px solid color-mix(in srgb, var(--color-brand-primary), transparent 80%);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px color-mix(in srgb, var(--color-brand-primary), transparent 50%);
+}
