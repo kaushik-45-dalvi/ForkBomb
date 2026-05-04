@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 
 import { useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
-import { Terminal, Shield, Trophy, Zap, ChevronLeft, Play, Send, Skull, Users, Layers, Globe, LogOut, Clock } from "lucide-react";
+import { Terminal, Shield, Trophy, Zap, ChevronLeft, Play, Send, Skull, Users, Layers, Globe, LogOut, Clock, Eye, History } from "lucide-react";
 import Link from "next/link";
 import RoastRoom from "@/components/RoastRoom";
 import GlitchText from "@/components/GlitchText";
@@ -46,12 +46,24 @@ export default function ArenaPage() {
   const [opponent, setOpponent] = useState<{name: string, elo: number} | null>(null);
   const [selectedLang, setSelectedLang] = useState(LANGUAGES[0]);
   const [timeElapsed, setTimeElapsed] = useState(0);
+  const [spectators, setSpectators] = useState(47);
+  const [userElo, setUserElo] = useState(1420);
 
-  // Timer Effect
+  // Timer & Spectators Effect
   useEffect(() => {
     if (!isReady || status === "submitted" || status === "finishing") return;
     const interval = setInterval(() => setTimeElapsed(prev => prev + 1), 1000);
-    return () => clearInterval(interval);
+    const spectInterval = setInterval(() => {
+      setSpectators(prev => {
+        const change = Math.floor(Math.random() * 7) - 1; 
+        const newVal = prev + change;
+        return newVal > 500 ? 500 : (newVal < 40 ? 40 : newVal);
+      });
+    }, 2500);
+    return () => {
+      clearInterval(interval);
+      clearInterval(spectInterval);
+    };
   }, [isReady, status, currentLevelIndex]);
 
   const formatTime = (seconds: number) => {
@@ -97,6 +109,12 @@ export default function ArenaPage() {
     
     if (isReady && teamName) {
       fetchOpponent();
+      
+      const fetchUserElo = async () => {
+        const { data } = await supabase.from('teams').select('elo').eq('name', teamName).single();
+        if (data && data.elo) setUserElo(data.elo);
+      };
+      fetchUserElo();
       
       const channel = supabase
         .channel('teams-channel')
@@ -302,6 +320,14 @@ export default function ArenaPage() {
                 {formatTime(timeElapsed)}
               </span>
             </div>
+
+            {/* Live Spectators */}
+            <div className="flex items-center gap-2 rounded-full border border-brand-danger/20 bg-brand-danger/10 px-3 py-1 shadow-[0_0_10px_rgba(255,69,0,0.1)]">
+              <Eye className="h-3 w-3 text-brand-danger animate-pulse" />
+              <span className="text-[10px] font-mono font-bold text-brand-danger">
+                {spectators} SPECTATORS
+              </span>
+            </div>
           </div>
         </div>
 
@@ -330,7 +356,7 @@ export default function ArenaPage() {
           <div className="flex items-center gap-2">
             <div className="text-right">
               <div className="text-[10px] font-mono text-brand-text/40 uppercase">Your ELO</div>
-              <div className="text-sm font-bold text-brand-text">1,420</div>
+              <div className="text-sm font-bold text-brand-text">{userElo.toLocaleString()}</div>
             </div>
             <Trophy className="h-5 w-5 text-brand-text/60" />
           </div>

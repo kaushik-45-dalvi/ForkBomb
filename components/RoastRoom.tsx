@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Trophy, Skull, Share2, Zap, TrendingUp, Award } from "lucide-react";
+import { X, Trophy, Skull, Share2, Zap, TrendingUp, Award, PlayCircle } from "lucide-react";
 
 interface RoastRoomProps {
   isOpen: boolean;
@@ -107,10 +107,14 @@ export default function RoastRoom({ isOpen, onClose, onNextDuel, verdict, scores
             </div>
 
             {/* Actions */}
-            <div className="flex gap-4">
+            <div className="flex flex-col gap-4 sm:flex-row">
               <button className="flex flex-1 items-center justify-center gap-2 rounded-full bg-brand-primary py-4 text-sm font-bold text-brand-bg transition-transform hover:scale-[1.02] active:scale-[0.98]">
                 <Share2 className="h-4 w-4" />
                 SHARE VICTORY
+              </button>
+              <button className="flex flex-1 items-center justify-center gap-2 rounded-full border border-brand-danger/40 bg-brand-danger/10 py-4 text-sm font-bold text-brand-danger transition-transform hover:bg-brand-danger/20 active:scale-[0.98]">
+                <PlayCircle className="h-4 w-4" />
+                WATCH REPLAY
               </button>
               <button 
                 onClick={onNextDuel || onClose}
